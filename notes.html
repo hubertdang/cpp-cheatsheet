@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>notes.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/*
+
+Atom One Light by Daniel Gamage
+Original One Light Syntax theme from https://github.com/atom/one-light-syntax
+
+base:    #fafafa
+mono-1:  #383a42
+mono-2:  #686b77
+mono-3:  #a0a1a7
+hue-1:   #0184bb
+hue-2:   #4078f2
+hue-3:   #a626a4
+hue-4:   #50a14f
+hue-5:   #e45649
+hue-5-2: #c91243
+hue-6:   #986801
+hue-6-2: #c18401
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #383a42;
+  background: #fafafa;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #a0a1a7;
+  font-style: italic;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula {
+  color: #a626a4;
+}
+
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst {
+  color: #e45649;
+}
+
+.hljs-literal {
+  color: #0184bb;
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta-string {
+  color: #50a14f;
+}
+
+.hljs-built_in,
+.hljs-class .hljs-title {
+  color: #c18401;
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number {
+  color: #986801;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title {
+  color: #4078f2;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-link {
+  text-decoration: underline;
+}
+
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="basics">Basics</h2>
+<h3 id="implicit-type-conversion">Implicit type conversion</h3>
+<ul>
+<li>
+<p>Assigning mismatched numerical types (e.g., <code>int</code> to <code>float</code>, or <code>double</code> to <code>float</code>, etc.) is fine (applies to <code>return</code> as well)</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// COMPILES</span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">float</span> i)</span> </span>{
+    <span class="hljs-keyword">return</span> i; <span class="hljs-comment">// fn(2.55) would return 2</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p>Passing a different type to a function is fine as long as the compiler can definitively deduce the function you're trying to call (i.e., no ambiguity)</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// COMPILES BECAUSE THERE IS ONLY 1 fn()</span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span> </span>{
+    <span class="hljs-keyword">return</span> i;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>* argv[])</span> </span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; fn(<span class="hljs-number">1</span>) &lt;&lt; fn(<span class="hljs-number">2.0</span>) &lt;&lt; <span class="hljs-built_in">endl</span>; <span class="hljs-comment">// outputs 12</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// FAILS COMPILATION BECAUSE fn(2.0) PASSES A DOUBLE, WHICH WORKS FOR BOTH</span>
+<span class="hljs-function"><span class="hljs-keyword">float</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">float</span> i)</span> </span>{
+    <span class="hljs-keyword">return</span> i;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span> </span>{
+    <span class="hljs-keyword">return</span> i;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>* argv[])</span> </span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; fn(<span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">" "</span> &lt;&lt; fn(<span class="hljs-number">2.0</span>) &lt;&lt; <span class="hljs-built_in">endl</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+</li>
+</ul>
+<h3 id="namespaces">Namespaces</h3>
+<ul>
+<li>
+<p><em>Unnamed</em> (or <em>anonymous</em>) namespaces can be used to achieve the same thing as a <code>static</code> global in C (i.e., scope accessible only by the current file)</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">namespace</span> {
+    <span class="hljs-keyword">int</span> p = <span class="hljs-number">4</span>; <span class="hljs-comment">// Access just by using p</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p>Namespaces don't all have to be defined in one place</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// n1::i and n1::t are both valid</span>
+<span class="hljs-keyword">namespace</span> n1 {
+    <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-keyword">namespace</span> n1 {
+    <span class="hljs-keyword">int</span> t = <span class="hljs-number">2</span>;
+}
+</div></code></pre>
+</li>
+</ul>
+<h3 id="immutability">Immutability</h3>
+<ul>
+<li>
+<p><code>const</code> variables are <strong>read-only</strong> after initialization (unless you use <code>mutable</code>, <code>const_cast</code>, or override directly to memory) and are resolved at compile time whenever possible</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>; <span class="hljs-comment">// Evaluated at compile time</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> b = a + <span class="hljs-number">1</span>; <span class="hljs-comment">// Evaluated at compile time because a was evaluated as 1</span>
+*(<span class="hljs-keyword">int</span> *)&amp;a = <span class="hljs-number">2</span>; <span class="hljs-comment">// This will work</span>
+a = <span class="hljs-number">3</span>;          <span class="hljs-comment">// This will not</span>
+</div></code></pre>
+</li>
+<li>
+<p>A <code>const</code> reference (e.g., <code>const int&amp; a</code>) protects the variable the reference points to (which must be <code>const</code> itself), not the reference itself, as references already can't be changed to point to something else</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>&amp; x)</span> </span>{
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>; <span class="hljs-comment">// Can only read x</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> a = <span class="hljs-number">5</span>;
+    <span class="hljs-keyword">int</span> b = <span class="hljs-number">2</span>;
+    fn(a); <span class="hljs-comment">// Ok</span>
+    fn(b); <span class="hljs-comment">// Fails</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p><code>const</code> member functions guarantee that they will not modify any member variables of the <code>class</code> or <code>struct</code></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Assume age is a member variable</span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{
+    age = <span class="hljs-number">10</span>; <span class="hljs-comment">// Fails compilation </span>
+    <span class="hljs-keyword">return</span> age;
+}
+</div></code></pre>
+</li>
+<li>
+<p><code>constexpr</code> expressions (e.g., variable assignment) <em>must</em> be resolved at compile time</p>
+</li>
+<li>
+<p><code>constexpr</code> functions will be resolved at compile time <em>if needed</em>, otherwise, it is up to the compiler</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">int</span> <span class="hljs-title">fn</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a)</span> </span>{
+    <span class="hljs-keyword">return</span> a * <span class="hljs-number">2</span>;
+}
+
+<span class="hljs-keyword">int</span> x = fn(<span class="hljs-number">1</span>); <span class="hljs-comment">// Compiler might optimize to execute at compile time, we don't know</span>
+<span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">int</span> y = fn(<span class="hljs-number">1</span>); <span class="hljs-comment">// Guaranteed to execute at compile time because y needs it to</span>
+</div></code></pre>
+</li>
+<li>
+<p><code>consteval</code> functions (not applicable to expressions) <em>must</em> be resolved at compile time, similarly to <code>constexpr</code> expressions</p>
+</li>
+<li>
+<p>If a function is neither <code>constexpr</code> or <code>consteval</code>, it will execute at runtime</p>
+</li>
+</ul>
+<h2 id="user-defined-types">User-Defined Types</h2>
+<h3 id="abstract-classes">Abstract classes</h3>
+<ul>
+<li>
+<p>An abstract class is a class with at least one pure virtual function</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> {</span>
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">calculatePay</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>; <span class="hljs-comment">// "virtual" and "= 0" makes this pure virtual</span>
+};
+</div></code></pre>
+</li>
+<li>
+<p>If all members of a class are pure virtual functions, the class is called a &quot;pure interface&quot;</p>
+</li>
+<li>
+<p>Abstract classes cannot be instantiated, so you can use a pointer or reference of the abstract type to point to a concrete child object</p>
+</li>
+</ul>
+<h3 id="inheritance">Inheritance</h3>
+<ul>
+<li>
+<p>To mark a class as a subclass of another, do this:</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IntVector</span>:</span> <span class="hljs-keyword">public</span> IntCollection {...}; <span class="hljs-comment">// IntVector is a subclass of IntCollection</span>
+</div></code></pre>
+</li>
+<li>
+<p><em>Upcasting</em> is when you observe a subclass as its parent class. This type of cast can be implicit</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// By pointer (safe)</span>
+IntVector* iv = <span class="hljs-keyword">new</span> IntVector;
+IntCollection* ic = iv;
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// By reference (safe)</span>
+IntVector iv;
+IntCollection&amp; ic = iv;
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// By value (object slicing)</span>
+IntVector iv;
+IntCollection&amp; ic = iv;
+</div></code></pre>
+</li>
+<li>
+<p><em>Downcasting</em> is when you recover data and functionality of an object that was previously upcasted. This kind of cast must be explicit and generally should be avoided because it often breaks things</p>
+<pre class="hljs"><code><div>IntVector&amp; iv = (IntVector&amp;) ic; <span class="hljs-comment">// Assume ic is an IntCollection&amp; type</span>
+</div></code></pre>
+</li>
+</ul>
+<h3 id="essential-operations">Essential operations</h3>
+<ul>
+<li>
+<p>Constructors are used when a new object is created, different constructors are used depending on the context</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> {</span>
+<span class="hljs-keyword">public</span>:
+    C();                <span class="hljs-comment">// Default constructor</span>
+    C(<span class="hljs-keyword">const</span> C&amp; other);  <span class="hljs-comment">// Copy constructor when creating a new object from an existing one</span>
+    C(C&amp;&amp; other);       <span class="hljs-comment">// Move constructor when creating an object by transferring ownership of</span>
+                        <span class="hljs-comment">// resources from a temporary object (rvalue)</span>
+};
+</div></code></pre>
+</li>
+<li>
+<p>The <em>copy</em> operation defaults to member-wise copy, which isn't appropriate for variables holding resource handlers</p>
+</li>
+<li>
+<p><strong>Copy assignment operator</strong> is used when both objects already exist, and you're just overwriting one with the other</p>
+<pre class="hljs"><code><div>C&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> C&amp; other) {...} <span class="hljs-comment">// a = b;</span>
+</div></code></pre>
+</li>
+<li>
+<p>Constructors can use direct initialization of member variables that don't require any special processing</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> {</span>
+    <span class="hljs-keyword">int</span> a = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> b = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">public</span>:
+    C(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) : a(a), b(b) {}
+};
+</div></code></pre>
+</li>
+</ul>
+<h2 id="error-handling">Error Handling</h2>
+<h3 id="exiting-a-program">Exiting a program</h3>
+<ul>
+<li>Functions registered with <code>atexit()</code> are executed during normal program termination, which happens immediately after <code>main()</code> returns or when <code>exit()</code> is explicitely called</li>
+<li>Functions registered with <code>set_terminate()</code> are executed when an exception is thrown but not caught, the exception handling mechanism fails, or std::terminate() is called manually</li>
+</ul>
+<h3 id="try-catch-blocks"><code>try</code>-<code>catch</code> blocks</h3>
+<ul>
+<li>
+<p>Implicit type conversion does not happen in <code>catch</code> blocks (e.g., you can't throw an <code>int</code> and catch a <code>float</code>)</p>
+</li>
+<li>
+<p>Exceptions should be caught as <code>const</code> references to prevent object slicing, avoid unnecessary copying, and preserve polymorphic behavior</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">try</span> {
+    fn(); <span class="hljs-comment">// throws a std::exception or a derivation of it</span>
+} <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::exception&amp; e) {
+    <span class="hljs-built_in">cerr</span> &lt;&lt; e.what() &lt;&lt; <span class="hljs-built_in">endl</span>;
+}
+</div></code></pre>
+</li>
+</ul>
+<h3 id="exception-safety">Exception safety</h3>
+<ul>
+<li>
+<p>Basic exception safety guarantees that invariants are preserved and no resources are leaked</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">int_vector</span> {</span>
+    <span class="hljs-keyword">size_t</span> size = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> *elems = <span class="hljs-literal">nullptr</span>;
+<span class="hljs-keyword">public</span>:
+    int_vector() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">resize</span><span class="hljs-params">(<span class="hljs-keyword">size_t</span> new_size)</span> </span>{
+        <span class="hljs-keyword">delete</span>[] e;
+        size = new_size; <span class="hljs-comment">// Broken invariant starts</span>
+        <span class="hljs-keyword">try</span> {
+            elems = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[new_size];
+        } <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::exception&amp;) {
+            <span class="hljs-comment">// Set invariant to valid state</span>
+            elems = <span class="hljs-literal">nullptr</span>;
+            size = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">throw</span>;
+        }
+    }
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">reversable_vector</span> {</span>
+    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; _original;
+    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; _reversed; 
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a)</span> </span>{
+        _original.push_back(a); <span class="hljs-comment">// Outside try block because push_back has strong guarantee</span>
+        <span class="hljs-keyword">try</span> {
+            _reversed.insert(_reversed.begin(), a);
+        } <span class="hljs-keyword">catch</span> (...) {
+            _original.clear();
+            _reversed.clear();
+            <span class="hljs-keyword">throw</span>;
+        }
+    }
+}
+</div></code></pre>
+</li>
+<li>
+<p>Strong exception safety guarantees basic exception safety and no state change</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">int_vector</span> {</span>
+    <span class="hljs-keyword">size_t</span> size = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> *elems = <span class="hljs-literal">nullptr</span>;
+<span class="hljs-keyword">public</span>:
+    int_vector() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">resize</span><span class="hljs-params">(<span class="hljs-keyword">size_t</span> new_size)</span> </span>{
+        <span class="hljs-keyword">int</span> *temp = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[new_size];
+        size = new_size; <span class="hljs-comment">// Broken invariant starts</span>
+        <span class="hljs-built_in">std</span>::swap(elems, temp);
+        <span class="hljs-keyword">delete</span>[] temp;
+    }
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">reversable_vector</span> {</span>
+    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; _original;
+    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; _reversed; 
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a)</span> </span>{
+        <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; temp = _reversed;
+        temp.insert(temp.begin(), a); <span class="hljs-comment">// So far, object state is unchanged</span>
+        _original.push_back(a); <span class="hljs-comment">// If this fails, object state will be left unchanged</span>
+        <span class="hljs-built_in">std</span>::swap(_reversed, temp); 
+    }
+}
+</div></code></pre>
+</li>
+<li>
+<p>No exception (<code>noexcept</code>) guarantees there is no way an exception exits the scope of the function. This does not mean no exceptions can be thrown within the function, they just need to be caught. Letting an exception leave a <code>noexcept</code> function or <code>main</code> triggers <code>std::terminate</code></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>{
+    <span class="hljs-built_in">std</span>::swap(_original, _reversed);
+}
+</div></code></pre>
+</li>
+</ul>
+<h2 id="generic-programming">Generic Programming</h2>
+<h3 id="template-types">Template types</h3>
+<ul>
+<li>
+<p><code>auto</code> function parameters are template types behind the scenes, however templates allow you to enforce multiple variables to be the same type</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">T <span class="hljs-title">add</span><span class="hljs-params">(T a, T b)</span> </span>{...} <span class="hljs-comment">// both must be the same type</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">auto</span> a, <span class="hljs-keyword">auto</span> b)</span> </span>{...} <span class="hljs-comment">// a and b can be different types</span>
+</div></code></pre>
+</li>
+<li>
+<p>Constrain template types by replacing the <code>typename</code> keyword with the name of a <strong>concept</strong> or using a <code>requires</code> clause</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span>&lt;integral T&gt; <span class="hljs-comment">// Only integral types (e.g., int, long, etc., just no floating point)</span>
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">requires</span> integral&lt;T&gt; <span class="hljs-comment">// Only integral types (e.g., int, long, etc., just no floating point)</span>
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+</li>
+<li>
+<p>You can combine concepts together</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span>&lt;integral T&gt;
+<span class="hljs-keyword">requires</span> integral&lt;T&gt; || floating_point&lt;T&gt; <span class="hljs-comment">// Only numbers</span>
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+</li>
+<li>
+<p>You can define your own concepts</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">concept</span> Number = integral&lt;T&gt; || floating_point&lt;T&gt;; <span class="hljs-comment">// Only numbers</span>
+
+<span class="hljs-keyword">template</span> &lt;Number T&gt;
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">concept</span> HasValueMemberAndClearMethod = <span class="hljs-keyword">requires</span>(T t) {
+    t.value;    <span class="hljs-comment">// Must have a public member named "value"</span>
+    t.clear();  <span class="hljs-comment">// Must have a public method named "clear"</span>
+}
+
+<span class="hljs-keyword">template</span> &lt;HasValueMemberAndClearMethod&gt;
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">concept</span> Addable = <span class="hljs-keyword">requires</span>(T a, T b) {
+    { a + b } -&gt; <span class="hljs-built_in">std</span>::same_as&lt;T&gt;; <span class="hljs-comment">// a + b must compile AND return type T</span>
+}
+
+<span class="hljs-keyword">template</span> &lt;Addable&gt;
+<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+</li>
+<li>
+<p>You can discard code branches at compile-time in templates based on type traits</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(<span class="hljs-built_in">std</span>::is_pointer_v&lt;T&gt;)</span> </span>{...}
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (<span class="hljs-built_in">std</span>::is_integral_v&lt;T&gt;) {...}
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (<span class="hljs-built_in">std</span>::is_floating_point_v&lt;T&gt;) {...}
+...
+</div></code></pre>
+</li>
+</ul>
+<h3 id="template-parameters">Template parameters</h3>
+<ul>
+<li>
+<p>If your requirements call for a compile-time parameter, you want a template parameter (e.g., &quot;implement a function that receives an integral value and <em>an int exponent at compile</em>&quot;)</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;integral T, <span class="hljs-keyword">int</span> exponent&gt;
+T <span class="hljs-title">integral_power</span><span class="hljs-params">(T base)</span> </span>{...} <span class="hljs-comment">// e.g., integral_power&lt;int, 3&gt;(4); is 4^3</span>
+</div></code></pre>
+</li>
+<li>
+<p>Template parameters are treated as l-values at runtime, so they are <em>read-only</em>. Think of template parameters as <code>#define</code> constants</p>
+</li>
+</ul>
+<h3 id="functors">Functors</h3>
+<ul>
+<li>
+<p>A <em>functor</em> is an object that acts like a function when asked to</p>
+</li>
+<li>
+<p>Overload the <code>operator()</code> to allow an object to be called and look like a function</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">equal_to_val</span> {</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> val;
+<span class="hljs-keyword">public</span>:
+    equal_to_val(<span class="hljs-keyword">int</span> v): val(v) {}
+    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>&amp; to_test)</span> </span>{
+        <span class="hljs-keyword">return</span> val == to_test;
+    }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">equal_to_val <span class="hljs-title">is_equal_to_five</span><span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;   <span class="hljs-comment">// Initialize val to 5</span>
+    <span class="hljs-keyword">bool</span> result1 = is_equal_to_five(<span class="hljs-number">6</span>); <span class="hljs-comment">// false</span>
+    <span class="hljs-keyword">bool</span> result2 = is_equal_to_five(<span class="hljs-number">5</span>); <span class="hljs-comment">// true </span>
+}
+</div></code></pre>
+</li>
+</ul>
+
+</body>
+</html>
