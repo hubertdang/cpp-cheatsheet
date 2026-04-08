@@ -404,3 +404,195 @@
         bool result2 = is_equal_to_five(5); // true 
     }
     ```
+
+## Standard Template Library (STL) Algorithms
+
+### Iterators
+
+| Category | Movement | Capabilities |
+| :--- | :--- | :--- |
+| **Input** | Forward only | Read once (Single-pass) |
+| **Output** | Forward only | Write once (Single-pass) |
+| **Forward** | Forward only | Read/Write (Multi-pass) |
+| **Bidirectional**| Forward / Backward | Read/Write, `++`, `--` |
+| **Random Access**| Jump anywhere (O(1)) | Read/Write, `+`, `-`, `[]`, `<` |
+| **Contiguous** (C++17) | Jump anywhere (O(1)) | Guaranteed adjacent in memory |
+
+### Algorithms
+
+* `any_of` returns `true` if **at least one** element satisfies the specified predicate
+
+    ```cpp
+    bool has_even = std::any_of(v.begin(), v.end(), [](int n) {
+        return n % 2 == 0;
+    });
+    ```
+* `all_of` returns `true` if **every** element satisfies the specified predicate
+
+    ```cpp
+    bool all_even = std::all_of(v.begin(), v.end(), [](int n) {
+        return n % 2 == 0;
+    });
+    ```
+
+* `none_of` returns `true` if **no** element satisfies the specified predicate
+
+    ```cpp
+    bool none_even = std::none_of(v.begin(), v.end(), [](int n) {
+        return n % 2 == 0;
+    });
+    ```
+
+* `find` returns an iterator to the **first** element that satisfies the specified value, `end()` iterator otherwise 
+
+    ```cpp
+    auto it = std::find(v.begin(), v.end(), 10);
+    if (it != v.end()) {
+        // Found the first 10
+    }
+    ```
+
+
+* `find_if` returns an iterator to the **first** element that satisfies the specified predicate, the iterator to the end of the range otherwise 
+
+    ```cpp
+    auto it = std::find(v.begin(), v.end(), [](int n) {
+        return n % 2 == 0;
+    });
+    if (it != v.end()) {
+        // Found the first even number
+    }
+    ```
+
+* `mismatch` returns a `std::pair` containing iterators to the first mismatched elements in two ranges of elements. If the ranges are identical, it returns iterators to the end of the ranges
+
+    ```cpp
+    auto [it1, it2] = std::mismatch(v1.begin(), v1.end(), v2.begin(), v2.end());
+    ```
+
+* `transform` applies a function to a range of elements and stores the result in a destination range. Binary `transform` assumes that the second iterator is *at least* the size of the first
+
+    ```cpp
+    // Unary transform
+    std::vector<int> v = {1, 2, 3, 4};
+    std::vector<int> result;
+
+    // Use result.begin() insetad of back_inserter if memory is pre-allocated
+    std::transform(v.begin(), v.end(), std::back_inserter(result), [](int n) {
+        return n * n;
+    });
+    ```
+
+    ```cpp
+    // Binary transform
+    std::vector<int> a = {1, 2, 3, 4};
+    std::vector<int> b = {1, 2, 3, 4}; // b.size() >= a.size() must be true
+    std::vector<int> result;
+
+    std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(result), [](int x, int y) {
+        return x - y;
+    });
+    ```
+
+* `reduce`, by default, sums the elements in a range, **in no particular order**. You can override this behaviour, however the operation you provide must be associative and commutative (doesn't matter what order everything is done in, e.g., addition, multiplication)
+
+    ```cpp
+    std::vector<int> v = {1, 2, 3, 4};
+
+    // Default returns 10
+    int sum = std::reduce(v.begin(), v.end());
+
+    // With initial value of 5 returns 15
+    int total = std::reduce(v.begin(), v.end(), 5);
+
+    // Provide associative operation (multiplication) with initial value 1
+    int product = std::reduce(v.begin(), v.end(), 1, [](int a, int b) {
+        return a * b;
+    });
+
+    // Parallel execution 
+    int par_sum = std::reduce(std::execution::par, v.begin(), v.end());
+    ```
+
+* `transform_reduce` does a `transform` and then a `reduce` in one call
+
+    ```cpp
+    // Unary transform
+    std::vector<int> v1 = {1, 2, 3};
+
+    int sum_squares = std::transform_reduce(v1.begin(), v1.end(), 0,
+                                            [](int a, int b) {
+                                                return a + b; // reduce operation
+                                            },
+                                            [](int a) {
+                                                return a * a; // transform operation
+                                            });
+    ```
+
+    ```cpp
+    // Binary transform
+    std::vector<int> v1 = {1, 2, 3};
+    std::vector<int> v2 = {4, 5, 6};
+
+    int dot_product = std::transform_reduce(v1.begin(), v1.end(), v2.begin(), 0,
+                                            [](int a, int b) {
+                                                return a + b; // reduce operation
+                                            },
+                                            [](int a, int b) {
+                                                return a * b; // transform operation
+                                            });
+    ```
+
+* `partial_sum` takes an input range and outputs a new range of the same size, where each element is the sum of all preceding elements up to that point. Note that the output of the first element is always itself, e.g., `output[0]` equals `input[0]`, or `input[0] + initial_value` if an initial value is provided. Modern C++ should use `inclusive_scan` instead
+
+    ```cpp
+    std::vector<int> v = {1, 2, 3, 4};
+    std::vector<int> result;
+
+    std::partial_sum(v.begin(), v.end(), std::back_inserter(result));
+    // result = {(1), (1 + 2), (1 + 2 + 3), (1 + 2 + 3 + 4)} = {1, 3, 6, 10}
+    ```
+
+    ```cpp
+    std::vector<int> v = {2, 2, 2, 2};
+    std::vector<int> powers;
+
+    // Override default behaviour (addition)
+    std::partial_sum(v.begin(), v.end(), std::back_inserter(result), [](int a, int b) {
+        return a * b;
+    });
+    // result = {(2), (2 * 2), (2 * 2 * 2), (2 * 2 * 2 * 2)} = {2, 4, 8, 16}
+    ```
+
+* `exclusive_scan` is just like `partial_sum`, except it excludes the current element from its own sum, and therefore requires an initial value
+
+    ```cpp
+    std::vector<int> v = {1, 2, 3, 4};
+    std::vector<int> result;
+
+    std::exclusive_scan(v.begin(), v.end(), std::back_inserter(result), 10);
+    // result = {(10), (10 + 1), (10 + 1 + 2), (10 + 1 + 2 + 3)} = {10, 11, 13, 16}
+    ```
+
+* `inclusive_scan` is the parallel-friendly version of `partial_sum`. Initial value is optional
+
+    ```cpp
+    std::vector<int> v = {1, 2, 3, 4};
+    std::vector<int> result;
+
+    std::inclusive_scan(v.begin(), v.end(), std::back_inserter(result));
+    // result = {(1), (1 + 2), (1 + 2 + 3), (1 + 2 + 3 + 4)} = {1, 3, 6, 10}
+
+    // Parallel execution
+    std::inclusive_scan(std::execution::par, v.begin(), v.end(), v.begin());
+    ```
+
+* `adjacent_difference` takes an input range and outputs a new range of the same size, where each element is the difference between the current element and the one immediately before it (e.g., `y_i = x_i - x_(i-1)`)
+
+    ```cpp
+    std::vector<int> v = {1, 2, 3, 4};
+    std::vector<int> result;
+
+    std::adjacent_difference(v.begin(), v.end(), std::back_inserter(result));
+    // result = {(1), (2 - 1), (3 - 2), (4 - 3)} = {1, 1, 1, 1}
+    ```

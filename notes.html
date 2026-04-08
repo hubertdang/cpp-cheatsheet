@@ -777,6 +777,210 @@ T <span class="hljs-title">integral_power</span><span class="hljs-params">(T bas
 </div></code></pre>
 </li>
 </ul>
+<h2 id="standard-template-library-stl-algorithms">Standard Template Library (STL) Algorithms</h2>
+<h3 id="iterators">Iterators</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Category</th>
+<th style="text-align:left">Movement</th>
+<th style="text-align:left">Capabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Input</strong></td>
+<td style="text-align:left">Forward only</td>
+<td style="text-align:left">Read once (Single-pass)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output</strong></td>
+<td style="text-align:left">Forward only</td>
+<td style="text-align:left">Write once (Single-pass)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Forward</strong></td>
+<td style="text-align:left">Forward only</td>
+<td style="text-align:left">Read/Write (Multi-pass)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Bidirectional</strong></td>
+<td style="text-align:left">Forward / Backward</td>
+<td style="text-align:left">Read/Write, <code>++</code>, <code>--</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Random Access</strong></td>
+<td style="text-align:left">Jump anywhere (O(1))</td>
+<td style="text-align:left">Read/Write, <code>+</code>, <code>-</code>, <code>[]</code>, <code>&lt;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Contiguous</strong> (C++17)</td>
+<td style="text-align:left">Jump anywhere (O(1))</td>
+<td style="text-align:left">Guaranteed adjacent in memory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="algorithms">Algorithms</h3>
+<ul>
+<li>
+<p><code>any_of</code> returns <code>true</code> if <strong>at least one</strong> element satisfies the specified predicate</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">bool</span> has_even = <span class="hljs-built_in">std</span>::any_of(v.begin(), v.end(), [](<span class="hljs-keyword">int</span> n) {
+    <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;
+});
+</div></code></pre>
+</li>
+<li>
+<p><code>all_of</code> returns <code>true</code> if <strong>every</strong> element satisfies the specified predicate</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">bool</span> all_even = <span class="hljs-built_in">std</span>::all_of(v.begin(), v.end(), [](<span class="hljs-keyword">int</span> n) {
+    <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;
+});
+</div></code></pre>
+</li>
+<li>
+<p><code>none_of</code> returns <code>true</code> if <strong>no</strong> element satisfies the specified predicate</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">bool</span> none_even = <span class="hljs-built_in">std</span>::none_of(v.begin(), v.end(), [](<span class="hljs-keyword">int</span> n) {
+    <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;
+});
+</div></code></pre>
+</li>
+<li>
+<p><code>find</code> returns an iterator to the <strong>first</strong> element that satisfies the specified value, <code>end()</code> iterator otherwise</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">auto</span> it = <span class="hljs-built_in">std</span>::find(v.begin(), v.end(), <span class="hljs-number">10</span>);
+<span class="hljs-keyword">if</span> (it != v.end()) {
+    <span class="hljs-comment">// Found the first 10</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p><code>find_if</code> returns an iterator to the <strong>first</strong> element that satisfies the specified predicate, the iterator to the end of the range otherwise</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">auto</span> it = <span class="hljs-built_in">std</span>::find(v.begin(), v.end(), [](<span class="hljs-keyword">int</span> n) {
+    <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;
+});
+<span class="hljs-keyword">if</span> (it != v.end()) {
+    <span class="hljs-comment">// Found the first even number</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p><code>mismatch</code> returns a <code>std::pair</code> containing iterators to the first mismatched elements in two ranges of elements. If the ranges are identical, it returns iterators to the end of the ranges</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">auto</span> [it1, it2] = <span class="hljs-built_in">std</span>::mismatch(v1.begin(), v1.end(), v2.begin(), v2.end());
+</div></code></pre>
+</li>
+<li>
+<p><code>transform</code> applies a function to a range of elements and stores the result in a destination range. Binary <code>transform</code> assumes that the second iterator is <em>at least</em> the size of the first</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Unary transform</span>
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-comment">// Use result.begin() insetad of back_inserter if memory is pre-allocated</span>
+<span class="hljs-built_in">std</span>::transform(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result), [](<span class="hljs-keyword">int</span> n) {
+    <span class="hljs-keyword">return</span> n * n;
+});
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// Binary transform</span>
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; b = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>}; <span class="hljs-comment">// b.size() &gt;= a.size() must be true</span>
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-built_in">std</span>::transform(a.begin(), a.end(), b.begin(), <span class="hljs-built_in">std</span>::back_inserter(result), [](<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> y) {
+    <span class="hljs-keyword">return</span> x - y;
+});
+</div></code></pre>
+</li>
+<li>
+<p><code>reduce</code>, by default, sums the elements in a range, <strong>in no particular order</strong>. You can override this behaviour, however the operation you provide must be associative and commutative (doesn't matter what order everything is done in, e.g., addition, multiplication)</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+
+<span class="hljs-comment">// Default returns 10</span>
+<span class="hljs-keyword">int</span> sum = <span class="hljs-built_in">std</span>::reduce(v.begin(), v.end());
+
+<span class="hljs-comment">// With initial value of 5 returns 15</span>
+<span class="hljs-keyword">int</span> total = <span class="hljs-built_in">std</span>::reduce(v.begin(), v.end(), <span class="hljs-number">5</span>);
+
+<span class="hljs-comment">// Provide associative operation (multiplication) with initial value 1</span>
+<span class="hljs-keyword">int</span> product = <span class="hljs-built_in">std</span>::reduce(v.begin(), v.end(), <span class="hljs-number">1</span>, [](<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) {
+    <span class="hljs-keyword">return</span> a * b;
+});
+
+<span class="hljs-comment">// Parallel execution </span>
+<span class="hljs-keyword">int</span> par_sum = <span class="hljs-built_in">std</span>::reduce(<span class="hljs-built_in">std</span>::execution::par, v.begin(), v.end());
+</div></code></pre>
+</li>
+<li>
+<p><code>transform_reduce</code> does a <code>transform</code> and then a <code>reduce</code> in one call</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Unary transform</span>
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v1 = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>};
+
+<span class="hljs-keyword">int</span> sum_squares = <span class="hljs-built_in">std</span>::transform_reduce(v1.begin(), v1.end(), <span class="hljs-number">0</span>,
+                                        [](<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) {
+                                            <span class="hljs-keyword">return</span> a + b; <span class="hljs-comment">// reduce operation</span>
+                                        },
+                                        [](<span class="hljs-keyword">int</span> a) {
+                                            <span class="hljs-keyword">return</span> a * a; <span class="hljs-comment">// transform operation</span>
+                                        });
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// Binary transform</span>
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v1 = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v2 = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>};
+
+<span class="hljs-keyword">int</span> dot_product = <span class="hljs-built_in">std</span>::transform_reduce(v1.begin(), v1.end(), v2.begin(), <span class="hljs-number">0</span>,
+                                        [](<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) {
+                                            <span class="hljs-keyword">return</span> a + b; <span class="hljs-comment">// reduce operation</span>
+                                        },
+                                        [](<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) {
+                                            <span class="hljs-keyword">return</span> a * b; <span class="hljs-comment">// transform operation</span>
+                                        });
+</div></code></pre>
+</li>
+<li>
+<p><code>partial_sum</code> takes an input range and outputs a new range of the same size, where each element is the sum of all preceding elements up to that point. Note that the output of the first element is always itself, e.g., <code>output[0]</code> equals <code>input[0]</code>, or <code>input[0] + initial_value</code> if an initial value is provided. Modern C++ should use <code>inclusive_scan</code> instead</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-built_in">std</span>::partial_sum(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result));
+<span class="hljs-comment">// result = {(1), (1 + 2), (1 + 2 + 3), (1 + 2 + 3 + 4)} = {1, 3, 6, 10}</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; powers;
+
+<span class="hljs-comment">// Override default behaviour (addition)</span>
+<span class="hljs-built_in">std</span>::partial_sum(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result), [](<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b) {
+    <span class="hljs-keyword">return</span> a * b;
+});
+<span class="hljs-comment">// result = {(2), (2 * 2), (2 * 2 * 2), (2 * 2 * 2 * 2)} = {2, 4, 8, 16}</span>
+</div></code></pre>
+</li>
+<li>
+<p><code>exclusive_scan</code> is just like <code>partial_sum</code>, except it excludes the current element from its own sum, and therefore requires an initial value</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-built_in">std</span>::exclusive_scan(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result), <span class="hljs-number">10</span>);
+<span class="hljs-comment">// result = {(10), (10 + 1), (10 + 1 + 2), (10 + 1 + 2 + 3)} = {10, 11, 13, 16}</span>
+</div></code></pre>
+</li>
+<li>
+<p><code>inclusive_scan</code> is the parallel-friendly version of <code>partial_sum</code>. Initial value is optional</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-built_in">std</span>::inclusive_scan(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result));
+<span class="hljs-comment">// result = {(1), (1 + 2), (1 + 2 + 3), (1 + 2 + 3 + 4)} = {1, 3, 6, 10}</span>
+
+<span class="hljs-comment">// Parallel execution</span>
+<span class="hljs-built_in">std</span>::inclusive_scan(<span class="hljs-built_in">std</span>::execution::par, v.begin(), v.end(), v.begin());
+</div></code></pre>
+</li>
+<li>
+<p><code>adjacent_difference</code> takes an input range and outputs a new range of the same size, where each element is the difference between the current element and the one immediately before it (e.g., <code>y_i = x_i - x_(i-1)</code>)</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>};
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; result;
+
+<span class="hljs-built_in">std</span>::adjacent_difference(v.begin(), v.end(), <span class="hljs-built_in">std</span>::back_inserter(result));
+<span class="hljs-comment">// result = {(1), (2 - 1), (3 - 2), (4 - 3)} = {1, 1, 1, 1}</span>
+</div></code></pre>
+</li>
+</ul>
 
 </body>
 </html>
