@@ -383,6 +383,40 @@
 
 * Template parameters are treated as l-values at runtime, so they are *read-only*. Think of template parameters as `#define` constants 
 
+### Partial specialization
+
+* Only classes and variables can be partially specialized, function templates cannot
+
+* When a type matches multiple specializations, the compiler always chooses the **most specialized** match
+
+    ```cpp
+    template <typename T> struct Foo;            // Primary (matches everything)
+    template <typename T> struct Foo<T*>;        // Spec 1 (matches any pointer)
+    template <typename T> struct Foo<const T*>;  // Spec 2 (matches only const pointers)
+
+    Foo<int> a;        // Uses Primary
+    Foo<int*> b;       // Uses Spec 1
+    Foo<const int*> c; // Uses Spec 2 (Matches Spec 1 & 2, but 2 is more specialized)
+    ```
+
+* If the compiler finds multiple matches but neither is strictly "more specialized" than the other, it stops and throws an **ambiguous template instantiation** error
+
+    ```cpp
+    template <typename T, typename U> struct Bar;          // Primary
+    template <typename T>             struct Bar<T, T>;    // Spec 1 (Both match)
+    template <typename T, typename U> struct Bar<T*, U>;   // Spec 2 (First is pointer)
+
+    Bar<int, double> a;  // Uses Primary
+    Bar<int, int> b;     // Uses Spec 1
+    Bar<int*, double> c; // Uses Spec 2
+
+    // ERROR: Ambiguous!
+    Bar<int*, int*> d;   
+    // Matches Spec 1 (both are int*) 
+    // Matches Spec 2 (first is int*)
+    // Neither rule is strictly a subset of the other.
+    ```
+
 ### Functors
 
 * A *functor* is an object that acts like a function when asked to

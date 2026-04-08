@@ -753,6 +753,40 @@ T <span class="hljs-title">integral_power</span><span class="hljs-params">(T bas
 <p>Template parameters are treated as l-values at runtime, so they are <em>read-only</em>. Think of template parameters as <code>#define</code> constants</p>
 </li>
 </ul>
+<h3 id="partial-specialization">Partial specialization</h3>
+<ul>
+<li>
+<p>Only classes and variables can be partially specialized, function templates cannot</p>
+</li>
+<li>
+<p>When a type matches multiple specializations, the compiler always chooses the <strong>most specialized</strong> match</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Foo</span>;</span>            <span class="hljs-comment">// Primary (matches everything)</span>
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Foo</span>&lt;T*&gt;;</span>        <span class="hljs-comment">// Spec 1 (matches any pointer)</span>
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Foo</span>&lt;const T*&gt;;</span>  <span class="hljs-comment">// Spec 2 (matches only const pointers)</span>
+
+Foo&lt;<span class="hljs-keyword">int</span>&gt; a;        <span class="hljs-comment">// Uses Primary</span>
+Foo&lt;<span class="hljs-keyword">int</span>*&gt; b;       <span class="hljs-comment">// Uses Spec 1</span>
+Foo&lt;<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>*&gt; c; <span class="hljs-comment">// Uses Spec 2 (Matches Spec 1 &amp; 2, but 2 is more specialized)</span>
+</div></code></pre>
+</li>
+<li>
+<p>If the compiler finds multiple matches but neither is strictly &quot;more specialized&quot; than the other, it stops and throws an <strong>ambiguous template instantiation</strong> error</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> U&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Bar</span>;</span>          <span class="hljs-comment">// Primary</span>
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;             <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Bar</span>&lt;T, T&gt;;</span>    <span class="hljs-comment">// Spec 1 (Both match)</span>
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> U&gt; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Bar</span>&lt;T*, U&gt;;</span>   <span class="hljs-comment">// Spec 2 (First is pointer)</span>
+
+Bar&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">double</span>&gt; a;  <span class="hljs-comment">// Uses Primary</span>
+Bar&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt; b;     <span class="hljs-comment">// Uses Spec 1</span>
+Bar&lt;<span class="hljs-keyword">int</span>*, <span class="hljs-keyword">double</span>&gt; c; <span class="hljs-comment">// Uses Spec 2</span>
+
+<span class="hljs-comment">// ERROR: Ambiguous!</span>
+Bar&lt;<span class="hljs-keyword">int</span>*, <span class="hljs-keyword">int</span>*&gt; d;   
+<span class="hljs-comment">// Matches Spec 1 (both are int*) </span>
+<span class="hljs-comment">// Matches Spec 2 (first is int*)</span>
+<span class="hljs-comment">// Neither rule is strictly a subset of the other.</span>
+</div></code></pre>
+</li>
+</ul>
 <h3 id="functors">Functors</h3>
 <ul>
 <li>
