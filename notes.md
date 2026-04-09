@@ -345,23 +345,43 @@
 
     ```cpp
     template <typename T>
-    concept HasValueMemberAndClearMethod = requires(T t) {
-        t.value;    // Must have a public member named "value"
-        t.clear();  // Must have a public method named "clear"
-    }
-
-    template <HasValueMemberAndClearMethod>
-    T fn(T a) {...}
-    ```
-
-    ```cpp
-    template <typename T>
     concept Addable = requires(T a, T b) {
         { a + b } -> std::same_as<T>; // a + b must compile AND return type T
     }
 
     template <Addable>
     T fn(T a) {...}
+    ```
+
+* A `requires` *clause* is used to attach a condition to a template, it expects a compile-time boolean expression right next to it
+
+    ```cpp
+    template <typename T>
+    requires std::same_as<T, int> // T must be int
+
+    template <typename T, typename U>
+    requires std::same_as<T, U> // T and U must be the same type
+    ```
+
+* A `requires` *expression* acts as a compile-time sandbox. You put dummy code inside it, and the compiler checks if it would compile. If the code is valid, the `requires` expression evaluates to `true`, `false` otherwise
+
+    ```cpp
+    template <typename T>
+    concept HasValueMemberAndClearMethod = requires(T t) {
+        t.value;                        // Must have a public member named "value"
+        t.get_value();                  // Must have a public method named "clear"
+        t + t;                          // Must be able to add to itself
+        { t + t } -> std::same_as<T>;   // t + t must return another T type
+    }
+    ```
+
+* Since a `requires` expression is a compile-time boolean expression, and a `requires` clause expects a compile-time boolean, you see them right next to each other sometimes
+
+    ```cpp
+    template <typename T>
+    requires requires(T t) {
+        t.get_value();
+    }
     ```
 
 * You can discard code branches at compile-time in templates based on type traits

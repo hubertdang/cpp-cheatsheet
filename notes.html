@@ -715,21 +715,40 @@ IntCollection&amp; ic = iv;
 <span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
 </div></code></pre>
 <pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
-<span class="hljs-keyword">concept</span> HasValueMemberAndClearMethod = <span class="hljs-keyword">requires</span>(T t) {
-    t.value;    <span class="hljs-comment">// Must have a public member named "value"</span>
-    t.clear();  <span class="hljs-comment">// Must have a public method named "clear"</span>
-}
-
-<span class="hljs-keyword">template</span> &lt;HasValueMemberAndClearMethod&gt;
-<span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
-</div></code></pre>
-<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
 <span class="hljs-keyword">concept</span> Addable = <span class="hljs-keyword">requires</span>(T a, T b) {
     { a + b } -&gt; <span class="hljs-built_in">std</span>::same_as&lt;T&gt;; <span class="hljs-comment">// a + b must compile AND return type T</span>
 }
 
 <span class="hljs-keyword">template</span> &lt;Addable&gt;
 <span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
+</div></code></pre>
+</li>
+<li>
+<p>A <code>requires</code> <em>clause</em> is used to attach a condition to a template, it expects a compile-time boolean expression right next to it</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">requires</span> <span class="hljs-built_in">std</span>::same_as&lt;T, <span class="hljs-keyword">int</span>&gt; <span class="hljs-comment">// T must be int</span>
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> U&gt;
+<span class="hljs-keyword">requires</span> <span class="hljs-built_in">std</span>::same_as&lt;T, U&gt; <span class="hljs-comment">// T and U must be the same type</span>
+</div></code></pre>
+</li>
+<li>
+<p>A <code>requires</code> <em>expression</em> acts as a compile-time sandbox. You put dummy code inside it, and the compiler checks if it would compile. If the code is valid, the <code>requires</code> expression evaluates to <code>true</code>, <code>false</code> otherwise</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">concept</span> HasValueMemberAndClearMethod = <span class="hljs-keyword">requires</span>(T t) {
+    t.value;                        <span class="hljs-comment">// Must have a public member named "value"</span>
+    t.get_value();                  <span class="hljs-comment">// Must have a public method named "clear"</span>
+    t + t;                          <span class="hljs-comment">// Must be able to add to itself</span>
+    { t + t } -&gt; <span class="hljs-built_in">std</span>::same_as&lt;T&gt;;   <span class="hljs-comment">// t + t must return another T type</span>
+}
+</div></code></pre>
+</li>
+<li>
+<p>Since a <code>requires</code> expression is a compile-time boolean expression, and a <code>requires</code> clause expects a compile-time boolean, you see them right next to each other sometimes</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function"><span class="hljs-keyword">requires</span> <span class="hljs-title">requires</span><span class="hljs-params">(T t)</span> </span>{
+    t.get_value();
+}
 </div></code></pre>
 </li>
 <li>
