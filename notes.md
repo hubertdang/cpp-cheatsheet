@@ -205,7 +205,7 @@
 
 ### `try`-`catch` blocks
 * Implicit type conversion does not happen in `catch` blocks (e.g., you can't throw an `int` and catch a `float`)
-* Exceptions should be caught as `const` references to prevent object slicing, avoid unnecessary copying, and preserve polymorphic behavior
+* Exceptions should be caught as `const` references to prevent object slicing, avoid unnecessary copying, and preserve polymorphic behavior. Additionally, some exception types are non-copyable
 
     ```cpp
     try {

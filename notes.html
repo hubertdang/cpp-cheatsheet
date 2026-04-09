@@ -593,7 +593,7 @@ IntCollection&amp; ic = iv;
 <p>Implicit type conversion does not happen in <code>catch</code> blocks (e.g., you can't throw an <code>int</code> and catch a <code>float</code>)</p>
 </li>
 <li>
-<p>Exceptions should be caught as <code>const</code> references to prevent object slicing, avoid unnecessary copying, and preserve polymorphic behavior</p>
+<p>Exceptions should be caught as <code>const</code> references to prevent object slicing, avoid unnecessary copying, and preserve polymorphic behavior. Additionally, some exception types are non-copyable</p>
 <pre class="hljs"><code><div><span class="hljs-keyword">try</span> {
     fn(); <span class="hljs-comment">// throws a std::exception or a derivation of it</span>
 } <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::exception&amp; e) {
