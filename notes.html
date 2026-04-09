@@ -701,7 +701,7 @@ IntCollection&amp; ic = iv;
 </li>
 <li>
 <p>You can combine concepts together</p>
-<pre class="hljs"><code><div><span class="hljs-keyword">template</span>&lt;integral T&gt;
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
 <span class="hljs-keyword">requires</span> integral&lt;T&gt; || floating_point&lt;T&gt; <span class="hljs-comment">// Only numbers</span>
 <span class="hljs-function">T <span class="hljs-title">fn</span><span class="hljs-params">(T a)</span> </span>{...}
 </div></code></pre>

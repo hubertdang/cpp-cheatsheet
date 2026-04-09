@@ -328,7 +328,7 @@
 * You can combine concepts together
 
     ```cpp
-    template<integral T>
+    template<typename T>
     requires integral<T> || floating_point<T> // Only numbers
     T fn(T a) {...}
     ```
